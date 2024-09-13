@@ -4,21 +4,28 @@
 
   /* ----------------------------------------------------------- */
   /*  FUNCTION TO STOP LOCAL AND YOUTUBE VIDEOS IN SLIDESHOW
-    /* ----------------------------------------------------------- */
+  /* ----------------------------------------------------------- */
 
   function stop_videos() {
     var video = document.getElementById("video");
-    if (video.paused !== true && video.ended !== true) {
+
+    // Check if video element exists and is not paused or ended
+    if (video && video.paused !== true && video.ended !== true) {
       video.pause();
     }
-    $('.youtube-video')[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+
+    // Check if there is a YouTube video element
+    var youtubeVideo = $('.youtube-video')[0];
+    if (youtubeVideo && youtubeVideo.contentWindow) {
+      youtubeVideo.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    }
   }
 
   $(document).ready(function () {
 
     /* ----------------------------------------------------------- */
     /*  STOP VIDEOS
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 
     $('.slideshow nav span').on('click', function () {
       stop_videos();
@@ -26,13 +33,13 @@
 
     /* ----------------------------------------------------------- */
     /*  FIX REVEALATOR ISSUE AFTER PAGE LOADED
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 
     $(".revealator-delay1").addClass('no-transform');
 
     /* ----------------------------------------------------------- */
     /*  PORTFOLIO GALLERY
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 
     if ($('.grid').length) {
       new CBPGridGallery(document.getElementById('grid-gallery'));
@@ -40,7 +47,7 @@
 
     /* ----------------------------------------------------------- */
     /*  HIDE HEADER WHEN PORTFOLIO SLIDESHOW OPENED
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 
     $(".grid figure").on('click', function () {
       $("#navbar-collapse-toggle").addClass('hide-header');
@@ -48,7 +55,7 @@
 
     /* ----------------------------------------------------------- */
     /*  SHOW HEADER WHEN PORTFOLIO SLIDESHOW CLOSED
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 
     $(".nav-close").on('click', function () {
       $("#navbar-collapse-toggle").removeClass('hide-header');
@@ -66,7 +73,7 @@
 
     /* ----------------------------------------------------------- */
     /*  PORTFOLIO DIRECTION AWARE HOVER EFFECT
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 
     var item = $(".grid li figure");
     var elementsLength = item.length;
@@ -76,7 +83,7 @@
 
     /* ----------------------------------------------------------- */
     /*  AJAX CONTACT FORM
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
 
     $(".contactform").on("submit", function () {
       $(".output_message").text("Sending...");
@@ -110,7 +117,7 @@
 
     /* ----------------------------------------------------------- */
     /*  KEYBOARD NAVIGATION IN PORTFOLIO SLIDESHOW
-        /* ----------------------------------------------------------- */
+    /* ----------------------------------------------------------- */
     if (e.keyCode === 27) {
       stop_videos();
       $('.close-content').click();
